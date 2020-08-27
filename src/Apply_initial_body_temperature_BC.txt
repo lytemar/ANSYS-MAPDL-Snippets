@@ -14,5 +14,5 @@
 
 cmsel,s,middle		! Select the component (named selection) "middle" 
 nsle,s			! Select all nodes in the component attached to its selected elements
-ic,all,temp,arg1		! Apply the initial temperature of arg1 [K] at the nodes
+ic,all,temp,arg1	! Apply the initial temperature of arg1 [K] at the nodes
 allsel			! Select all elements (BE SURE TO DO THIS!!!!)
