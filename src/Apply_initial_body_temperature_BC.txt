@@ -1,0 +1,18 @@
+!==============================================================================================
+! This command snippet applies an initial body temperature to a component (named selection)
+! in a Transient Thermal analysis.  This object gets places in the Transient Structural branch.
+!
+! The component is named "middle" in this example.  Edit it to match the named selection name
+!       arg1  = initial temperature
+! As always, be careful to watch the units.
+!==============================================================================================
+
+!   Commands inserted into this file will be executed just prior to the Ansys SOLVE command.
+!   These commands may supersede command settings set by Workbench.
+
+!   Active UNIT system in Workbench when this object was created:  Metric (m, kg, N, s, V, A)
+
+cmsel,s,middle		! Select the component (named selection) "middle" 
+nsle,s			! Select all nodes in the component attached to its selected elements
+ic,all,temp,arg1		! Apply the initial temperature of arg1 [K] at the nodes
+allsel			! Select all elements (BE SURE TO DO THIS!!!!)
