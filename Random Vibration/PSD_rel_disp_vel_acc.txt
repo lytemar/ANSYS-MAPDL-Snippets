@@ -1,0 +1,16 @@
+!==============================================================================================
+! This command snippet directs the solver to compute relative displacement, velocity and
+! acceleration for a Random Vibration Analysis.  This object gets placed in the Random Vibration
+! branch.
+!
+! As always, be careful to watch the units.
+!==============================================================================================
+
+!   Commands inserted into this file will be executed just prior to the Ansys SOLVE command.
+!   These commands may supersede command settings set by Workbench.
+
+!   Active UNIT system in Workbench when this object was created:  Metric (m, kg, N, s, V, A)
+
+psdres,disp,rel
+psdres,velo,rel
+psdres,acel,rel
