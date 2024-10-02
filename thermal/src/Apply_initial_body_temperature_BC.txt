@@ -1,6 +1,6 @@
 !==============================================================================================
 ! This command snippet applies an initial body temperature to a component (named selection)
-! in a Transient Thermal analysis.  This object gets places in the Transient Structural branch.
+! in a Transient Thermal analysis.  This object gets placed in the Transient Structural branch.
 !
 ! The component is named "middle" in this example.  Edit it to match the named selection name
 !       arg1  = initial temperature
