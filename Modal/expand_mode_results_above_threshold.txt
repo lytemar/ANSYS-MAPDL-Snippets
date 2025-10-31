@@ -5,16 +5,17 @@
 !   NOTE:  Any data that requires units (such as mass) is assumed to be in the consistent solver unit system.
 !                See Solving Units in the help system for more information.
 
+! Place in the Modal analysis system
 ! Expand modes in a modal analysis given a threshold for use in downstream analysis.
 
 
 /solu 
-antype,modal
+antype,modal		! Specify modal analysis type
 mxpand,-1			! Don't expand and do not write modes to the results file during the analysis
  
 outres,all,none		! Don't write any output
 outres,nsol,all		! Output all nodal DOF solution items
-outres,esol,all		! Output all element solution items (comment if desired to control individual items)
+!outres,esol,all		! Output all element solution items (comment if desired to control individual items)
 
 ! Individual element solution items (comment if esol,all is active)
 outres,strs,all		! Output element nodal stresses
