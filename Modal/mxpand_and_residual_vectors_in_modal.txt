@@ -1,0 +1,73 @@
+!   Commands inserted into this file will be executed just prior to the ANSYS SOLVE command.
+!   These commands may supersede command settings set by Workbench.
+
+!   Active UNIT system in Workbench when this object was created:  Metric (mm, t, N, s, mV, mA)
+!   NOTE:  Any data that requires units (such as mass) is assumed to be in the consistent solver unit system.
+!                See Solving Units in the help system for more information.
+
+! To be placed in the Modal analysis branch
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! First expand modes in an modal analysis given a threshold for use in downstream analysis, then compute residual vectors.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+MODE_EXPAND = 1					! (0 = off, 1 = on)
+RESIDUAL_VECTORS = 1			! (0 = off, 1 = on)
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!  OUTPUT CONTROLS  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+outres,all,none		! Don't write any output
+outres,nsol,all		! Output all nodal DOF solution items
+!outres,rsol,all		! Output nodal reaction loads
+!outres,esol,all		! Output all element solution items (comment if desired to control individual items)
+
+! Individual element solution items (comment if esol,all is active)
+outres,strs,all		! Output element nodal stresses
+outres,nload,all	! Output all element nodal, input constraint, and force loads
+outres,misc,all		! Output element miscellaneous data (ETABLE SMISC and NMISC items)
+!outres,eangl,all		! Output element Euler angles
+!outres,veng,all		! Output element energies
+!outres,bkstr,all		! Output element back stresses
+!outres,epel,all		! Output elastic strains
+!outres,eppl,all		! Output element plastic strains
+!outres,cont,all		! Output element contact data
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! MODE EXPANSION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+*IF,MODE_EXPAND,EQ,1,THEN
+	/solu 
+	antype,modal
+	mxpand,-1			! Don't expand and do not write modes to the results file during the analysis
+
+	solve
+	fini
+	 
+	/solu
+	antype,modal,restart
+	! Calculate element results, reaction forces, energies, and nodal DOF solution, restricting selection of modes to
+	! those that have modal effective mass ratio above significance threshold = .001 here
+	mxpand,,,,yes,0.0001,,EFFM
+	modseloption,yes,yes,yes,yes,yes,yes		! Select modes in all 6 Cartesian directions
+*ENDIF
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! END MODE EXPANSION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RESIDUAL VECTORS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Comment all following lines if residual vectors are not desired
+
+*IF,RESIDUAL_VECTORS,EQ,1,THEN
+
+	! Perform the modal analysis (compute the eigenvalues and the load vector) only for the first load step; form the
+	! load vector for each subsequent load step (without repeating the eigenvalue calculations) and write all load
+	! vectors to the Jobname.mode file for downstream mode-superposition analyses.
+	MODCONT,ON
+
+	RESVEC,ON			! Calculate residual vectors
+	ACEL,1.0,0.0,0.0	! Specify the X linear acceleration of the global Cartesian reference frame
+	SOLVE
+	ACEL,0.0,1.0,0.0	! Specify the Y linear acceleration of the global Cartesian reference frame
+	SOLVE
+	ACEL,0.0,0.0,1.0	! Specify the Z linear acceleration of the global Cartesian reference frame
+	SOLVE
+*ENDIF
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! END RESIDUAL VECTORS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
