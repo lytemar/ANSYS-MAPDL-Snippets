@@ -13,6 +13,7 @@
 
 MODE_EXPAND = 1					! (0 = off, 1 = on)
 RESIDUAL_VECTORS = 1			! (0 = off, 1 = on)
+MODE_EXPAND_THRESH = 1e-4		! Modal expansion threshold
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!  OUTPUT CONTROLS  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -47,7 +48,7 @@ outres,misc,all		! Output element miscellaneous data (ETABLE SMISC and NMISC ite
 	antype,modal,restart
 	! Calculate element results, reaction forces, energies, and nodal DOF solution, restricting selection of modes to
 	! those that have modal effective mass ratio above significance threshold = .001 here
-	mxpand,,,,yes,0.0001,,EFFM
+	mxpand,,,,yes,MODE_EXPAND_THRESH,,EFFM
 	modseloption,yes,yes,yes,yes,yes,yes		! Select modes in all 6 Cartesian directions
 *ENDIF
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! END MODE EXPANSION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
