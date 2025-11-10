@@ -19,7 +19,7 @@ MODE_EXPAND_THRESH = 1e-4		! Modal expansion threshold
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!  OUTPUT CONTROLS  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 outres,all,none		! Don't write any output
 outres,nsol,all		! Output all nodal DOF solution items
-!outres,rsol,all		! Output nodal reaction loads
+outres,rsol,all		! Output nodal reaction loads
 !outres,esol,all		! Output all element solution items (comment if desired to control individual items)
 
 ! Individual element solution items (comment if esol,all is active)
