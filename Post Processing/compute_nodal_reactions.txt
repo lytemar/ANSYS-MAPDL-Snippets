@@ -19,16 +19,45 @@ set,last										! Read the last results set
 
 ALLSEL											! Select all entities
 
-cmsel,s,flange_1_mate_nodes						! Select the nodal component
-/com, "Compute reaction forces for TBD"
-!rsys,solu
-FSUM											! Sum all nodal forces in global coordinate system
-/com, "Reaction forces amd moments for TBD"
-*get,my_flange1_fx,fsum,,item,FX
-*get,my_flange1_fy,fsum,,item,FY
-*get,my_flange1_fz,fsum,,item,FZ
-*get,my_flange1_mx,fsum,,item,MX
-*get,my_flange1_my,fsum,,item,MY
-*get,my_flange1_mz,fsum,,item,MZ
+!!!!!!!!!!!!!!!! USER PARAMETERS !!!!!!!!!!!!!!!!
+NUM_OUTPUTS = 1									! Number of surfaces to output
+*del,COMP_NAMES
+*DIM,COMP_NAMES,string,80,NUM_OUTPUTS			! Define a 1D array of component names
+
+!!! Add each nodal named selection to the array
+COMP_NAMES(1,1) = 'flange_1_mate_nodes'
+!!!!!!!!!!!!!!! END USER PARAMETERS !!!!!!!!!!!!!!
+
+*del,VALUE
+*DIM,VALUE,,NUM_OUTPUTS,7                       ! Define a 2D array to store component name and force reactions (FX, FY, FX, MX, MY, MZ)
+
+*DO,I,1,NUM_OUTPUTS
+	cmsel,s,%COMP_NAMES(1,I)%						! Select the nodal component
+	/com, Compute reaction forces for %COMP_NAMES(1,I)%
+	!rsys,solu
+	FSUM											! Sum all nodal forces in global coordinate system
+	/com, Reaction forces amd moments for TBD %COMP_NAMES(1,I)%
+	*get,fsumx,fsum,,item,FX
+	VALUE(I,1) = fsumx
+	*get,fsumy,fsum,,item,FY
+	VALUE(I,2) = fsumy
+	*get,fsumz,fsum,,item,FZ
+	VALUE(I,3) = fsumz
+	*get,msumx,fsum,,item,MX
+	VALUE(I,4) = msumx
+	*get,msumy,fsum,,item,MY
+	VALUE(I,5) = msumy
+	*get,msumz,fsum,,item,MZ
+	VALUE(I,6) = msumz
+*ENDDO
+
+
+/OUTPUT,JOIN(_wb_userfiles_dir_RS(1),'FILENAME_NEEDED'),csv
+*VWRITE, 'CompName', 'FX[N]', 'FY[N]', 'FZ[N]', 'MX[N-mm]', 'MY[N-mm]', 'MZ[N-mm]'
+%-32C, %-18C, %-18C, %-18C, %-18C, %-18C, %-18C
+*VWRITE,COMP_NAMES(1),VALUE(1,1),VALUE(1,2),VALUE(1,3),VALUE(1,4),VALUE(1,5),VALUE(1,6)
+%-32C, %13.2f, %13.2f, %13.2f, %13.2f, %13.2f, %13.2f
+
+/OUT											! Redirects output to the default location
 
 ALLSEL											! Select all entities
