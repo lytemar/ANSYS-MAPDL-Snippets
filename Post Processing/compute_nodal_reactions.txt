@@ -1,0 +1,34 @@
+!   Commands inserted into this file will be executed immediately after the ANSYS /POST1 command.
+
+!   Active UNIT system in Workbench when this object was created:  Metric (mm, t, N, s, mV, mA)
+!   NOTE:  Any data that requires units (such as mass) is assumed to be in the consistent solver unit system.
+!                See Solving Units in the help system for more information.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!  Commands place in the Solution Branch to get nodal reaction forces and moments
+!  NOTE: Save MAPDL db = Yes in Analysis Settings
+!  Uses nodal named selection as component
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+RESUME											! Resume the database from the database file
+FINISH											! Exit normally from the processor
+/SOLU											! Enter the solution processor
+/POST1											! Enter the postprocessor
+set,last										! Read the last results set
+! set,4,1										! For Response Spectrum analysis, displacements only
+
+ALLSEL											! Select all entities
+
+cmsel,s,flange_1_mate_nodes						! Select the nodal component
+/com, "Compute reaction forces for TBD"
+!rsys,solu
+FSUM											! Sum all nodal forces in global coordinate system
+/com, "Reaction forces amd moments for TBD"
+*get,my_flange1_fx,fsum,,item,FX
+*get,my_flange1_fy,fsum,,item,FY
+*get,my_flange1_fz,fsum,,item,FZ
+*get,my_flange1_mx,fsum,,item,MX
+*get,my_flange1_my,fsum,,item,MY
+*get,my_flange1_mz,fsum,,item,MZ
+
+ALLSEL											! Select all entities
