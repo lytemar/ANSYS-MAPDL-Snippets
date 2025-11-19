@@ -38,7 +38,7 @@ COMP_NAMES(1,1) = 'flange_1_mate_nodes'
 	/com, Compute reaction forces for %COMP_NAMES(1,I)%
 	!rsys,solu
 	FSUM											! Sum all nodal forces in global coordinate system
-	/com, Reaction forces amd moments for TBD %COMP_NAMES(1,I)%
+	/com, Reaction forces and moments for TBD %COMP_NAMES(1,I)%
 	*get,fsumx,fsum,,item,FX
 	VALUE(I,1) = fsumx
 	*get,fsumy,fsum,,item,FY
