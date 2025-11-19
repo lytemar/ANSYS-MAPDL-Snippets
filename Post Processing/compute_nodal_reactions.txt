@@ -15,12 +15,13 @@ FINISH											! Exit normally from the processor
 /SOLU											! Enter the solution processor
 /POST1											! Enter the postprocessor
 set,last										! Read the last results set
-! set,4,1										! For Response Spectrum analysis, displacements only
+!set,4,1										! For Response Spectrum analysis, displacements only
 
 ALLSEL											! Select all entities
 
 !!!!!!!!!!!!!!!! USER PARAMETERS !!!!!!!!!!!!!!!!
 NUM_OUTPUTS = 1									! Number of surfaces to output
+FILENAME = 'FILENAME_NEEDED'					! File name prefix for output
 *del,COMP_NAMES
 *DIM,COMP_NAMES,string,80,NUM_OUTPUTS			! Define a 1D array of component names
 
@@ -52,7 +53,10 @@ COMP_NAMES(1,1) = 'flange_1_mate_nodes'
 *ENDDO
 
 
-/OUTPUT,JOIN(_wb_userfiles_dir_RS(1),'FILENAME_NEEDED'),csv
+/OUTPUT,JOIN(_wb_userfiles_dir(1), %FILENAME%),csv			! For Static Structural
+!/OUTPUT,JOIN(_wb_userfiles_dir_RS(1), %FILENAME%),csv		! For Response Spectrum
+!/OUTPUT,JOIN(_wb_userfiles_dir_PSD(1), %FILENAME%),csv		! For Random Vibration
+!!!!! A dash in front of number in a format string left justifies string output
 *VWRITE, 'CompName', 'FX[N]', 'FY[N]', 'FZ[N]', 'MX[N-mm]', 'MY[N-mm]', 'MZ[N-mm]'
 %-32C, %-18C, %-18C, %-18C, %-18C, %-18C, %-18C
 *VWRITE,COMP_NAMES(1),VALUE(1,1),VALUE(1,2),VALUE(1,3),VALUE(1,4),VALUE(1,5),VALUE(1,6)
