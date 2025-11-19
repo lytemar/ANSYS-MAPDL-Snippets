@@ -27,6 +27,7 @@ FILENAME = 'FILENAME_NEEDED'					! File name prefix for output
 
 !!! Add each nodal named selection to the array
 COMP_NAMES(1,1) = 'flange_1_mate_nodes'
+!COMP_NAMES(1,2) = 'flange_2_mate_nodes'		! Example for more than one surface to output
 !!!!!!!!!!!!!!! END USER PARAMETERS !!!!!!!!!!!!!!
 
 *del,VALUE
